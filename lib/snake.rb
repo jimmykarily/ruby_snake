@@ -1,5 +1,5 @@
 class Snake
-  attr_accessor :body, :direction, :speed
+  attr_accessor :body, :direction, :speed, :limit_x, :limit_y
 
   DIRECTIONS = {
     "up" => 0,
@@ -10,10 +10,12 @@ class Snake
 
   # Creates a new snake at x, y.
   # Initially the snake moves downwards
-  def initialize(head_size)
+  def initialize(head_size, limit_x, limit_y)
     head = Square.new(size: head_size)
     head.color = 'red'
     @body = [head]
+    @limit_x = limit_x
+    @limit_y = limit_y
     @speed = 1
 
     @direction = DIRECTIONS["down"]
@@ -32,12 +34,16 @@ class Snake
     case Snake::DIRECTIONS.invert[$snake.direction]
     when "up"
       body[0].y = body[0].y - speed
+      body[0].y = body[0].y + limit_y if body[0].y < 0
     when "down"
       body[0].y = body[0].y + speed
+      body[0].y = body[0].y - limit_y if body[0].y > limit_y
     when "right"
       body[0].x = body[0].x + speed
+      body[0].x = body[0].x - limit_x if body[0].x > limit_x
     when "left"
       body[0].x = body[0].x - speed
+      body[0].x = body[0].x + limit_x if body[0].x < 0
     end
   end
 end

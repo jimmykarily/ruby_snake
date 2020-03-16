@@ -10,7 +10,7 @@ SNAKE_HEAD_SIZE=20
 # Set the window size
 set width: BOARD_WIDTH, height: BOARD_HEIGHT
 
-$snake = Snake.new(SNAKE_HEAD_SIZE)
+$snake = Snake.new(SNAKE_HEAD_SIZE, BOARD_WIDTH, BOARD_HEIGHT)
 
 on :key_up do |event|
   $snake.set_direction(event.key.to_s)
