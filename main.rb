@@ -1,16 +1,14 @@
 #!/usr/bin/env ruby
 
 require_relative 'lib/snake'
+require_relative 'lib/world'
 require 'ruby2d'
 
-BOARD_WIDTH=500
-BOARD_HEIGHT=500
-SNAKE_HEAD_SIZE=20
+$world = World.new(500, 500)
+$snake = Snake.new($world.width, $world.height)
 
 # Set the window size
-set width: BOARD_WIDTH, height: BOARD_HEIGHT
-
-$snake = Snake.new(SNAKE_HEAD_SIZE, BOARD_WIDTH, BOARD_HEIGHT)
+set width: $world.width, height: $world.height
 
 on :key_up do |event|
   $snake.set_direction(event.key.to_s)
