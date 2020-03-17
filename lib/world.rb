@@ -1,6 +1,8 @@
 class World
-  attr_accessor :width, :height, :square_size, :points, :apple_x, :apple_y,
-    :apple
+  attr_accessor :width, :height, :square_size, :points, :points_label,
+    :apple_x, :apple_y, :apple
+
+  APPLE_POINTS = 10
 
   # width: the width of the window
   # height: the height of the window
@@ -11,6 +13,21 @@ class World
     @square_size = square_size
     @points = 0
     @apple = show_apple
+    @points_label = update_points(0)
+  end
+
+  def update_points(points)
+    if !points_label
+      Text.new("Points: #{points}",
+        x: square_size, y: square_size,
+        font: 'fonts/HappyMonkey-Regular.ttf',
+        size: 20,
+        color: "#DEC9B9",
+        z: 10
+      )
+    else
+      @points_label.text = "Points: #{points}"
+    end
   end
 
   # Creates an apple at a random location on the board
@@ -36,5 +53,6 @@ class World
 
   def eat_an_apple
     show_apple
+    update_points(@points += APPLE_POINTS)
   end
 end
