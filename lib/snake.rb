@@ -11,7 +11,8 @@ class Snake
   # Creates a new snake at x, y.
   # Initially the snake moves downwards
   def initialize(limit_x:, limit_y:, head_size:)
-    head = Square.new(size: head_size, x: limit_x / 2, y: limit_y /2, color: "#DEC9B9")
+    head = Square.new(size: head_size, x: limit_x / 2, y: limit_y /2, z: 1,
+                      color: "#DEC9B9")
     @body = [head]
     @limit_x = limit_x
     @limit_y = limit_y
@@ -45,5 +46,7 @@ class Snake
       body[0].x = body[0].x - speed
       body[0].x = body[0].x + limit_x if body[0].x < 0
     end
+
+    return body[0].x, body[0].y
   end
 end

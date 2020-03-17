@@ -20,7 +20,10 @@ on :key_up do |event|
 end
 
 update do
-  $snake.move()
+  snake_x, snake_y = $snake.move()
+  if $world.close_to_apple?(snake_x, snake_y)
+    $world.eat_an_apple
+  end
 end
 
 show
