@@ -51,7 +51,7 @@ class World
     (apple_x - x).abs <= square_size && (apple_y - y).abs <= square_size
   end
 
-  def eat_an_apple
+  def eat_the_apple
     show_apple
     update_points(@points += APPLE_POINTS)
   end

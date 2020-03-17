@@ -1,5 +1,6 @@
 class Snake
-  attr_accessor :body, :direction, :speed, :head_size, :limit_x, :limit_y
+  attr_accessor :body, :direction, :speed, :head_size, :limit_x, :limit_y,
+    :apples_eaten
 
   DIRECTIONS = {
     "up" => 0,
@@ -7,6 +8,9 @@ class Snake
     "down" => 2,
     "left" => 3
   }
+
+  APPLE_SPEED_BOOST = 1
+  APPLE_SPEED_BOOST_THRESHOLD = 10 # How many apples should the snake eat before a speed boost happens
 
   # Creates a new snake at x, y.
   # Initially the snake moves downwards
@@ -18,6 +22,7 @@ class Snake
     @limit_y = limit_y
     @speed = 1
     @head_size = head_size
+    @apples_eaten = 0
 
     @direction = DIRECTIONS["down"]
   end
@@ -48,5 +53,16 @@ class Snake
     end
 
     return body[0].x, body[0].y
+  end
+
+  # Increase the speed by APPLE_SPEED_BOOST every APPLE_SPEED_BOOST_THRESHOLD apples
+  def adjust_speed
+    @speed = (@apples_eaten / APPLE_SPEED_BOOST_THRESHOLD) + APPLE_SPEED_BOOST
+  end
+
+  def eat_the_apple
+    @apples_eaten += 1
+    adjust_speed
+    # TODO: add to the tale
   end
 end

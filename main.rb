@@ -22,7 +22,8 @@ end
 update do
   snake_x, snake_y = $snake.move()
   if $world.close_to_apple?(snake_x, snake_y)
-    $world.eat_an_apple
+    $world.eat_the_apple
+    $snake.eat_the_apple
   end
 end
 
