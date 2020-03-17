@@ -1,7 +1,5 @@
 class Snake
-  attr_accessor :body, :direction, :speed, :limit_x, :limit_y
-
-  HEAD_SIZE=20
+  attr_accessor :body, :direction, :speed, :head_size, :limit_x, :limit_y
 
   DIRECTIONS = {
     "up" => 0,
@@ -12,13 +10,13 @@ class Snake
 
   # Creates a new snake at x, y.
   # Initially the snake moves downwards
-  def initialize(limit_x, limit_y)
-    head = Square.new(size: HEAD_SIZE, x: limit_x / 2, y: limit_y /2)
-    head.color = 'red'
+  def initialize(limit_x:, limit_y:, head_size:)
+    head = Square.new(size: head_size, x: limit_x / 2, y: limit_y /2, color: "#DEC9B9")
     @body = [head]
     @limit_x = limit_x
     @limit_y = limit_y
     @speed = 1
+    @head_size = head_size
 
     @direction = DIRECTIONS["down"]
   end
