@@ -1,5 +1,6 @@
 class World
-  attr_accessor :width, :height, :square_size, :points, :apple_x, :apple_y
+  attr_accessor :width, :height, :square_size, :points, :apple_x, :apple_y,
+    :apple
 
   # width: the width of the window
   # height: the height of the window
@@ -9,6 +10,7 @@ class World
     @height = height
     @square_size = square_size
     @points = 0
+    @apple = show_apple
   end
 
   # Creates an apple at a random location on the board
@@ -16,8 +18,13 @@ class World
     @apple_x = rand(width-square_size)
     @apple_y = rand(height-square_size)
 
-    Image.new('images/apple.png', x: apple_x, y: apple_y,
-              width: square_size, height: square_size, z: 0)
+    if !apple
+      Image.new('images/apple.png', x: apple_x, y: apple_y,
+                width: square_size, height: square_size, z: 0)
+    else
+      apple.x = @apple_x
+      apple.y = @apple_y
+    end
   end
 
   # Checks if a square of size square_size would "touch" the apple if it was
@@ -28,6 +35,6 @@ class World
   end
 
   def eat_an_apple
-    puts "eat it!"
+    show_apple
   end
 end
