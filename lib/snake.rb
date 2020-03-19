@@ -1,4 +1,10 @@
 class Snake
+  # Speed is defined in pixels. It is the number of pixels the head
+  # moves in every invocation of the update loop.
+  # TODO: Implement decimal values:
+  #   Don't move the snake until a full pixel move is supposed to happen. E.g.
+  #   with a speed of 0.5 we should only move the snake 1px in every second
+  #   invocation.
   attr_accessor :head, :body, :direction, :speed, :speed_save, :head_size,
     :limit_x, :limit_y, :apples_eaten
 
