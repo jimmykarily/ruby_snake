@@ -2,12 +2,7 @@ class Snake
   attr_accessor :head, :body, :direction, :speed, :speed_save, :head_size,
     :limit_x, :limit_y, :apples_eaten
 
-  DIRECTIONS = {
-    "up" => 0,
-    "right" => 1,
-    "down" => 2,
-    "left" => 3
-  }
+  DIRECTIONS = ["up","right","down","left"]
 
   APPLE_SPEED_BOOST = 1
   APPLE_SPEED_BOOST_THRESHOLD = 10 # How many apples should the snake eat before a speed boost happens
@@ -28,15 +23,15 @@ class Snake
     @apples_eaten = 0
     @grow_tail_pixels=0
 
-    @direction = DIRECTIONS["down"]
+    @direction = "down"
   end
 
   # TODO: Don't change the direction when new_direction
   # is towards the snake's tale.
-  def set_direction(direction)
-    if new_direction = DIRECTIONS[direction]
-      @direction = new_direction
-    elsif direction == "space"
+  def handle_input(input)
+    if DIRECTIONS.include?(input)
+      @direction = input
+    elsif input == "space"
       if @speed == 0 # we were paused
         @speed = @speed_save
       else
@@ -47,7 +42,7 @@ class Snake
   end
 
   def move_head
-    case DIRECTIONS.invert[direction]
+    case direction
     when "up"
       head.y = head.y - speed
       head.y = head.y + limit_y if head.y < 0
@@ -71,7 +66,7 @@ class Snake
   def move_tail
     ([speed,[body.length,@grow_tail_pixels].max].min).times do |i|
       body.unshift(
-        case Snake::DIRECTIONS.invert[direction]
+        case direction
         when "up"
           Rectangle.new(
             x: head.x, y: (head.y+head_size) + i,

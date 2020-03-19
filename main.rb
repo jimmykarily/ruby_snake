@@ -16,7 +16,7 @@ set title: "Ruby snake!"
 set background: '#5B4443'
 
 on :key_up do |event|
-  $snake.set_direction(event.key.to_s)
+  $snake.handle_input(event.key.to_s)
 end
 
 update do
