@@ -1,5 +1,5 @@
 class Snake
-  attr_accessor :head, :body, :direction, :speed, :head_size,
+  attr_accessor :head, :body, :direction, :speed, :speed_save, :head_size,
     :limit_x, :limit_y, :apples_eaten
 
   DIRECTIONS = {
@@ -23,7 +23,7 @@ class Snake
     @body = []
     @limit_x = limit_x
     @limit_y = limit_y
-    @speed = 1
+    @speed = @speed_save = 1
     @head_size = head_size
     @apples_eaten = 0
     @grow_tail_pixels=0
@@ -35,8 +35,14 @@ class Snake
   # is towards the snake's tale.
   def set_direction(direction)
     if new_direction = DIRECTIONS[direction]
-      puts "Setting direction to #{direction}"
       @direction = new_direction
+    elsif direction == "space"
+      if @speed == 0 # we were paused
+        @speed = @speed_save
+      else
+        @speed_save = @speed
+        @speed = 0
+      end
     end
   end
 
@@ -94,12 +100,13 @@ class Snake
       body.pop(speed - @grow_tail_pixels).each{|element| element.remove}
       @grow_tail_pixels = 0
     else
-      puts "growing"
       @grow_tail_pixels = @grow_tail_pixels - speed
     end
   end
 
   def move
+    return [head.x, head.y] if @speed == 0 # We are paused
+
     new_head_location = move_head
     move_tail
 
