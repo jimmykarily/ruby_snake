@@ -4,7 +4,7 @@ require_relative 'lib/snake'
 require_relative 'lib/world'
 require 'ruby2d'
 
-$world = World.new(width: 500, height: 500, square_size: 20)
+$world = World.new(width: 500, height: 500, square_size: 30)
 $snake = Snake.new(limit_x: $world.width,
                    limit_y: $world.height,
                    head_size: $world.square_size)

@@ -10,7 +10,7 @@ class Snake
   }
 
   APPLE_SPEED_BOOST = 1
-  APPLE_SPEED_BOOST_THRESHOLD = 3 # How many apples should the snake eat before a speed boost happens
+  APPLE_SPEED_BOOST_THRESHOLD = 10 # How many apples should the snake eat before a speed boost happens
   SNAKE_HEAD_COLOR="#DEC9B9"
   SNAKE_TAIL_COLOR="white"
   TAIL_GROW_PIXELS=8 # number of pixels to grow tail after eating an apple
