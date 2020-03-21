@@ -32,11 +32,18 @@ class Snake
     @direction = "down"
   end
 
+  # Changes direction only when the new direction is not towards the tail.
+  def change_direction(direction)
+    if (DIRECTIONS.index(direction) - DIRECTIONS.index(@direction)).abs != 2
+      @direction = direction
+    end
+  end
+
   # TODO: Don't change the direction when new_direction
   # is towards the snake's tale.
   def handle_input(input)
     if DIRECTIONS.include?(input)
-      @direction = input
+      change_direction(input)
     elsif input == "space"
       if @speed == 0 # we were paused
         @speed = @speed_save
