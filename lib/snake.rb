@@ -39,11 +39,34 @@ class Snake
     end
   end
 
-  # TODO: Don't change the direction when new_direction
-  # is towards the snake's tale.
+  # Detects if the snake's head will collide with the tail when moved one more
+  # pixel towards the current direction. We check if the pixels of the snake's
+  # "face" overlap with any of the pixels of any of the tail elements.
+  def collision?
+    next_x = face_x = next_head_x
+    next_y = face_y = next_head_y
+
+    # The location of the head is defined by the top left corner.
+    # That corner is not part of the "face" of the snake when going right or down.
+    face_x = next_x + head_size if direction == "right"
+    face_y = next_y + head_size if direction == "down"
+
+    body.detect do |tail_part|
+      tail_part.width == 1 && face_x == tail_part.x &&
+        # vertical face overlaps with a the vertical tail_part
+        ((face_y..face_y + head_size).to_a & (tail_part.y..tail_part.y + head_size).to_a).any? ||
+      tail_part.height == 1 && face_y == tail_part.y &&
+        # horizontal face overlaps with a the horizontal tail_part
+        ((face_x..face_x + head_size).to_a & (tail_part.x..tail_part.x + head_size).to_a).any?
+    end || false
+  end
+
+  # Returns true if there is a collision (when direction changes) or false
+  # otherwise.
   def handle_input(input)
     if DIRECTIONS.include?(input)
       change_direction(input)
+      return collision?
     elsif input == "space"
       if @speed == 0 # we were paused
         @speed = @speed_save
@@ -52,23 +75,43 @@ class Snake
         @speed = 0
       end
     end
+
+    return false
+  end
+
+  def next_head_x
+    new_x = head.x
+
+    case direction
+    when "right"
+      new_x = head.x + speed
+      new_x = new_x - limit_x if new_x > limit_x
+    when "left"
+      new_x = head.x - speed
+      new_x = new_x + limit_x if new_x < 0
+    end
+
+    new_x
+  end
+
+  def next_head_y
+    new_y = head.y
+
+    case direction
+    when "up"
+      new_y = head.y - speed
+      new_y = new_y + limit_y if new_y < 0
+    when "down"
+      new_y = head.y + speed
+      new_y = new_y - limit_y if new_y > limit_y
+    end
+
+    new_y
   end
 
   def move_head
-    case direction
-    when "up"
-      head.y = head.y - speed
-      head.y = head.y + limit_y if head.y < 0
-    when "down"
-      head.y = head.y + speed
-      head.y = head.y - limit_y if head.y > limit_y
-    when "right"
-      head.x = head.x + speed
-      head.x = head.x - limit_x if head.x > limit_x
-    when "left"
-      head.x = head.x - speed
-      head.x = head.x + limit_x if head.x < 0
-    end
+    head.x = next_head_x
+    head.y = next_head_y
 
     return head.x, head.y
   end
