@@ -17,7 +17,10 @@ set background: '#5B4443'
 
 on :key_up do |event|
   collision = $snake.handle_input(event.key.to_s)
-  puts "Collision!" if collision
+  if collision
+    $snake.speed = 0
+    $world.game_over
+  end
 end
 
 update do

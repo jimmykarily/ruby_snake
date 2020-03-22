@@ -30,6 +30,19 @@ class World
     end
   end
 
+  # Shows the "Game over" text and a points summary
+  def game_over
+    t = Text.new("Game over!",
+      x: width / 2, y: height / 2,
+      font: 'fonts/HappyMonkey-Regular.ttf',
+      size: 50,
+      color: "#DEC9B9",
+      z: 10
+    )
+    t.x = (width / 2) - t.width / 2
+    t.y = (height / 2) - t.height / 2
+  end
+
   # Creates an apple at a random location on the board
   def show_apple
     @apple_x = rand(width-square_size)

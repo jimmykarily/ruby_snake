@@ -42,6 +42,8 @@ class Snake
   # Detects if the snake's head will collide with the tail when moved one more
   # pixel towards the current direction. We check if the pixels of the snake's
   # "face" overlap with any of the pixels of any of the tail elements.
+  # NOTE: if our calculations are slow, then consider using "contains?" from
+  # the ruby2d library: https://www.ruby2d.com/learn/2d-basics/#contains
   def collision?
     next_x = face_x = next_head_x
     next_y = face_y = next_head_y
