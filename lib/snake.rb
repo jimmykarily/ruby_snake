@@ -45,30 +45,42 @@ class Snake
   # NOTE: if our calculations are slow, then consider using "contains?" from
   # the ruby2d library: https://www.ruby2d.com/learn/2d-basics/#contains
   def collision?
-    next_x = face_x = next_head_x
-    next_y = face_y = next_head_y
+    next_x = next_head_x(true)
+    next_y = next_head_y(true)
 
-    # The location of the head is defined by the top left corner.
-    # That corner is not part of the "face" of the snake when going right or down.
-    face_x = next_x + head_size if direction == "right"
-    face_y = next_y + head_size if direction == "down"
+    face_pixels =
+      case direction
+      when "right"
+        (next_y..next_y + head_size).map { |y| [next_x + head_size, y] }
+      when "left"
+        (next_y..next_y + head_size).map { |y| [next_x, y] }
+      when "up"
+        (next_x..next_x + head_size).map { |x| [x, next_y] }
+      when "down"
+        (next_x..next_x + head_size).map { |x| [x, next_y + head_size] }
+      end
 
     body.detect do |tail_part|
-      tail_part.width == 1 && face_x == tail_part.x &&
-        # vertical face overlaps with a the vertical tail_part
-        ((face_y..face_y + head_size).to_a & (tail_part.y..tail_part.y + head_size).to_a).any? ||
-      tail_part.height == 1 && face_y == tail_part.y &&
-        # horizontal face overlaps with a the horizontal tail_part
-        ((face_x..face_x + head_size).to_a & (tail_part.x..tail_part.x + head_size).to_a).any?
-    end || false
+      part_pixels = if tail_part.width == 1
+        # vertical_part
+        (tail_part.y..(tail_part.y + head_size)).map { |y| [tail_part.x, y] }
+      else
+        # horizontal part
+        (tail_part.x..(tail_part.x + head_size)).map { |x| [x, tail_part.y] }
+      end
+
+      if (part_pixels & face_pixels).any?
+        puts "#{part_pixels} \n collide with \n #{face_pixels} \n on : \n #{part_pixels & face_pixels}"
+        true
+      else
+        false
+      end
+    end
   end
 
-  # Returns true if there is a collision (when direction changes) or false
-  # otherwise.
   def handle_input(input)
     if DIRECTIONS.include?(input)
       change_direction(input)
-      return collision?
     elsif input == "space"
       if @speed == 0 # we were paused
         @speed = @speed_save
@@ -77,34 +89,40 @@ class Snake
         @speed = 0
       end
     end
-
-    return false
   end
 
-  def next_head_x
+  # Calculates the next x coordinate of the head in the update loop, based on
+  # the current speed. If force_speed_1 it does the same calculation as if
+  # speed was "1". It is used for collision calculation (since in that case
+  # we don't want to skip pixels).
+  def next_head_x(force_speed_1=false)
     new_x = head.x
 
     case direction
     when "right"
-      new_x = head.x + speed
+      new_x = head.x + (force_speed_1 ? 1 : speed)
       new_x = new_x - limit_x if new_x > limit_x
     when "left"
-      new_x = head.x - speed
+      new_x = head.x - (force_speed_1 ? 1 : speed)
       new_x = new_x + limit_x if new_x < 0
     end
 
     new_x
   end
 
-  def next_head_y
+  # Calculates the next y coordinate of the head in the update loop, based on
+  # the current speed. If force_speed_1 it does the same calculation as if
+  # speed was "1". It is used for collision calculation (since in that case
+  # we don't want to skip pixels).
+  def next_head_y(force_speed_1=false)
     new_y = head.y
 
     case direction
     when "up"
-      new_y = head.y - speed
+      new_y = head.y - (force_speed_1 ? 1 : speed)
       new_y = new_y + limit_y if new_y < 0
     when "down"
-      new_y = head.y + speed
+      new_y = head.y + (force_speed_1 ? 1 : speed)
       new_y = new_y - limit_y if new_y > limit_y
     end
 

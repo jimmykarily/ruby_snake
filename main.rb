@@ -16,11 +16,7 @@ set title: "Ruby snake!"
 set background: '#5B4443'
 
 on :key_up do |event|
-  collision = $snake.handle_input(event.key.to_s)
-  if collision
-    $snake.speed = 0
-    $world.game_over
-  end
+  $snake.handle_input(event.key.to_s)
 end
 
 update do
@@ -28,6 +24,11 @@ update do
   if $world.close_to_apple?(snake_x, snake_y)
     $world.eat_the_apple
     $snake.eat_the_apple
+  end
+
+  if $snake.collision?
+    $snake.speed = 0
+    $world.game_over
   end
 end
 
